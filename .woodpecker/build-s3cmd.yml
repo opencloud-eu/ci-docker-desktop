@@ -15,7 +15,7 @@ matrix:
     - platform: windows/amd64
       clone_image: opencloudeu/woodpecker-windows-git-plugin:v2
       build_image: winamd64/docker:windowsservercore-ltsc2022
-      socket_mount: \\.\pipe\docker_engine:\\.\pipe\docker_engine
+      socket_mount: \\.\pipe\docker_engine\:\\.\pipe\docker_engine\
 
 labels:
   platform: ${platform}
@@ -32,4 +32,4 @@ steps:
       - ${socket_mount}
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
-      - docker push opencloudeu/s3cmd
+      #- docker push opencloudeu/s3cmd
