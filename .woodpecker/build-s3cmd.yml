@@ -15,7 +15,7 @@ matrix:
     - platform: windows/amd64
       clone_image: opencloudeu/woodpecker-windows-git-plugin:v2
       build_image: winamd64/docker:windowsservercore-ltsc2022
-      socket_mount: \\\\.\\pipe\\docker_engine:\\\\.\\pipe\\docker_engine
+      socket_mount: \\.\pipe\docker_engine:\\.\pipe\docker_engine
 
 labels:
   platform: ${platform}
@@ -27,9 +27,6 @@ clone:
 
 steps:
   - name: build
-    when:
-      - matrix:
-          platform: windows/amd64
     image: ${build_image}
     volumes:
       - ${socket_mount}
