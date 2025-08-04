@@ -1,0 +1,39 @@
+---
+# variables:
+
+when:
+  - event: push
+    branch: "add_s3cmd"
+
+matrix:
+  include:
+    - platform: linux/amd64
+      clone_image: woodpeckerci/plugin-git
+      build_image: winamd64/docker:windowsservercore-ltsc2022
+    - platform: windows/amd64
+      clone_image: opencloudeu/woodpecker-windows-git-plugin:v2
+      build_image: docker
+
+labels:
+  platform: ${platform}
+  backend: docker
+
+clone:
+  - image: ${clone_image}
+
+steps:
+  - name: build windows
+    when:
+      - platform: windows/amd64
+    image: ${build_image}
+    volumes:
+      - '\\.\pipe\docker_engine:\\.\pipe\docker_engine'
+    commands:
+      - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
+
+  - name: build linux
+    when:
+      - platform: linux/*
+    image: ${build_image}
+    commands:
+      - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
