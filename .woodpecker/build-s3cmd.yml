@@ -10,10 +10,10 @@ matrix:
   include:
     - platform: linux/amd64
       clone_image: woodpeckerci/plugin-git
-      build_image: winamd64/docker:windowsservercore-ltsc2022
+      build_image: docker
     - platform: windows/amd64
       clone_image: opencloudeu/woodpecker-windows-git-plugin:v2
-      build_image: docker
+      build_image: winamd64/docker:windowsservercore-ltsc2022
 
 labels:
   platform: ${platform}
