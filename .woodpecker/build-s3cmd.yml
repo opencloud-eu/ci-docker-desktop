@@ -4,6 +4,7 @@
 when:
   - event: push
     branch: "add_s3cmd"
+  - event: manual
 
 matrix:
   include:
@@ -13,7 +14,6 @@ matrix:
     - platform: windows/amd64
       clone_image: opencloudeu/woodpecker-windows-git-plugin:v2
       build_image: docker
-
 
 labels:
   platform: ${platform}
