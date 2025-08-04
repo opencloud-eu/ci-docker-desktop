@@ -20,7 +20,8 @@ labels:
   backend: docker
 
 clone:
-  - image: ${clone_image}
+  - name: clone
+    image: ${clone_image}
 
 steps:
   - name: build windows
@@ -31,6 +32,7 @@ steps:
       - '\\.\pipe\docker_engine:\\.\pipe\docker_engine'
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
+      - docker push opencloudeu/s3cmd
 
   - name: build linux
     when:
@@ -38,3 +40,4 @@ steps:
     image: ${build_image}
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
+      - docker push opencloudeu/s3cmd
