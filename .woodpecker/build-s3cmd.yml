@@ -36,7 +36,8 @@ steps:
 
   - name: build linux
     when:
-      - platform: "linux/*"
+      - platform:
+          - "linux/amd64"
     image: ${build_image}
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
