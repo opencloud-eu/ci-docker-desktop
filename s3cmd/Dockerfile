@@ -10,7 +10,7 @@ LABEL maintainer="OpenCloud.eu Team <devops@opencloud.eu>" `
       vendor="OpenCloud GmbH" `
       source="https://github.com/opencloud-eu/ci-docker-desktop"
 
-COPY rename_script.py rename_script.py
+COPY . .
 
-RUN python -m pip install s3cmd ; `
+RUN python -m pip install -r requirements.txt ; `
     python rename_script.py
