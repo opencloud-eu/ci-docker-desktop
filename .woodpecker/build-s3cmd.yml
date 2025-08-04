@@ -26,7 +26,8 @@ clone:
 steps:
   - name: build windows
     when:
-      platform: windows/amd64
+      - matrix:
+          platform: windows/amd64
     image: ${build_image}
     volumes:
       - '\\.\pipe\docker_engine:\\.\pipe\docker_engine'
@@ -36,8 +37,8 @@ steps:
 
   - name: build linux
     when:
-      platform:
-        - linux/amd64
+      - matrix:
+          platform: linux/amd64
     image: ${build_image}
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
