@@ -15,7 +15,6 @@ variables:
 when:
   - event: push
     path: 's3cmd/*'
-  - event: manual
   - event: cron
 
 matrix:
