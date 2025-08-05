@@ -42,5 +42,5 @@ steps:
       - ${socket_mount}
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
-      - echo "${DOCKER_USERNAME}" | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_URL}
+      - echo "${DOCKER_USERNAME}" | docker login "${DOCKER_URL}" --username "${DOCKER_USERNAME}" --password-stdin
       - docker push opencloudeu/s3cmd
