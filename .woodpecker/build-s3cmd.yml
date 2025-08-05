@@ -14,8 +14,11 @@ variables:
 
 when:
   - event: push
-    branch: "add_s3cmd"
+    path: 's3cmd/*'
+  - event: pull_request
+    path: 's3cmd/*'
   - event: manual
+  - event: cron
 
 matrix:
   include:
