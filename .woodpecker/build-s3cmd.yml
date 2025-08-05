@@ -46,7 +46,7 @@ steps:
       - ${socket_mount}
     environment: *build_vars
     commands:
-      - build.ps1
+      - .woodpecker/build.ps1
 
   - name: build linux
     when:
@@ -57,4 +57,4 @@ steps:
       - ${socket_mount}
     environment: *build_vars
     commands:
-      - build.sh
+      - .woodpecker/build.sh
