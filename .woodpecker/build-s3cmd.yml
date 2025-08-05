@@ -1,14 +1,15 @@
 ---
 variables:
-  - DOCKER_URL: "docker.io"
-  - DOCKER_USERNAME:
+  - &build_vars
+    DOCKER_URL: "docker.io"
+    DOCKER_USERNAME:
       from_secret: docker_username
-  - DOCKER_PASSWORD:
+    DOCKER_PASSWORD:
       from_secret: docker_password
-  - QUAY_URL: "quay.io"
-  - QUAY_USERNAME:
+    QUAY_URL: "quay.io"
+    QUAY_USERNAME:
       from_secret: quay_username
-  - QUAY_PASSWORD:
+    QUAY_PASSWORD:
       from_secret: quay_password
 
 when:
@@ -36,11 +37,24 @@ clone:
     image: ${clone_image}
 
 steps:
-  - name: build
+  - name: build windows
+    when:
+      - matrix:
+          platform: windows/amd64
     image: ${build_image}
     volumes:
       - ${socket_mount}
+    environment: *build_vars
     commands:
-      - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
-      - echo "${QUAY_USERNAME}" | docker login "${QUAY_URL}" --username "${QUAY_USERNAME}" --password-stdin
-      - docker push opencloudeu/s3cmd
+      - build.ps1
+
+  - name: build linux
+    when:
+      - matrix:
+          platform: linux/amd64
+    image: ${build_image}
+    volumes:
+      - ${socket_mount}
+    environment: *build_vars
+    commands:
+      - build.sh
