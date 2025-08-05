@@ -1,5 +1,15 @@
 ---
-# variables:
+variables:
+  DOCKER_URL: "docker.io"
+  DOCKER_USERNAME:
+    from_secret: docker_username
+  DOCKER_PASSWORD:
+    from_secret: docker_password
+  QUAY_URL: "quay.io"
+  QUAY_USERNAME:
+    from_secret: quay_username
+  QUAY_PASSWORD:
+    from_secret: quay_password
 
 when:
   - event: push
@@ -32,4 +42,5 @@ steps:
       - ${socket_mount}
     commands:
       - docker build s3cmd -f s3cmd/Dockerfile -t opencloudeu/s3cmd
-      #- docker push opencloudeu/s3cmd
+      - echo "${DOCKER_USERNAME}" | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_URL}
+      - docker push opencloudeu/s3cmd
