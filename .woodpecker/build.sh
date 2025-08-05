@@ -11,7 +11,7 @@ docker tag opencloudeu/s3cmd:v$date $QUAY_URL/opencloudeu/s3cmd:v1
 
 docker push opencloudeu/s3cmd:v$date
 docker push opencloudeu/s3cmd:v1
-docker push DOCKER_URL/opencloudeu/s3cmd:v$date
-docker push DOCKER_URL/opencloudeu/s3cmd:v1
-docker push QUAY_URL/opencloudeu/s3cmd:v$date
-docker push QUAY_URL/opencloudeu/s3cmd:v1
+docker push $DOCKER_URL/opencloudeu/s3cmd:v$date
+docker push $DOCKER_URL/opencloudeu/s3cmd:v1
+docker push $QUAY_URL/opencloudeu/s3cmd:v$date
+docker push $QUAY_URL/opencloudeu/s3cmd:v1

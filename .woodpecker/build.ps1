@@ -1,5 +1,5 @@
-echo "$env:DOCKER_PASSWORD" | docker login $env:DOCKER_URL --username "$env:DOCKER_USERNAME" --password-stdin
-echo "$env:QUAY_PASSWORD" | docker login "$env:QUAY_URL" --username "$env:QUAY_USERNAME" --password-stdin
+docker login $env:DOCKER_URL --username "$env:DOCKER_USERNAME" --password "$env:DOCKER_PASSWORD"
+docker login "$env:QUAY_URL" --username "$env:QUAY_USERNAME" --password "$env:QUAY_PASSWORD"
 cd s3cmd
 $date = get-date -format FileDate
 docker build . -f Dockerfile -t opencloudeu/s3cmd:v$date
