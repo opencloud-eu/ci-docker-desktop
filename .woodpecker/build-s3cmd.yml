@@ -1,15 +1,15 @@
 ---
 variables:
-  DOCKER_URL: "docker.io"
-  DOCKER_USERNAME:
-    from_secret: docker_username
-  DOCKER_PASSWORD:
-    from_secret: docker_password
-  QUAY_URL: "quay.io"
-  QUAY_USERNAME:
-    from_secret: quay_username
-  QUAY_PASSWORD:
-    from_secret: quay_password
+  - DOCKER_URL: "docker.io"
+  - DOCKER_USERNAME:
+      from_secret: docker_username
+  - DOCKER_PASSWORD:
+      from_secret: docker_password
+  - QUAY_URL: "quay.io"
+  - QUAY_USERNAME:
+      from_secret: quay_username
+  - QUAY_PASSWORD:
+      from_secret: quay_password
 
 when:
   - event: push
