@@ -57,4 +57,4 @@ steps:
       - ${socket_mount}
     environment: *build_vars
     commands:
-      - .woodpecker/build.sh
+      - sh .woodpecker/build.sh
