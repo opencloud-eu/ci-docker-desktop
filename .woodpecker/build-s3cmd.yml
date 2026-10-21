@@ -1,0 +1,62 @@
+---
+variables:
+  - &build_vars
+    DOCKER_URL: "docker.io"
+    DOCKER_USERNAME:
+      from_secret: docker_username
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    QUAY_URL: "quay.io"
+    QUAY_USERNAME:
+      from_secret: quay_username
+    QUAY_PASSWORD:
+      from_secret: quay_password
+
+when:
+  - event: push
+    path: 's3cmd/*'
+  - event: push
+    path: '.woodpecker/*'
+  - event: cron
+
+matrix:
+  include:
+    - platform: linux/amd64
+      clone_image: woodpeckerci/plugin-git
+      build_image: docker
+      socket_mount: /var/run/docker.sock:/var/run/docker.sock
+    - platform: windows/amd64
+      clone_image: opencloudeu/woodpecker-windows-git-plugin:v2
+      build_image: winamd64/docker:windowsservercore-ltsc2022
+      socket_mount: \\.\pipe\docker_engine\:\\.\pipe\docker_engine\
+
+labels:
+  platform: ${platform}
+  backend: docker
+
+clone:
+  - name: clone
+    image: ${clone_image}
+
+steps:
+  - name: build windows
+    when:
+      - matrix:
+          platform: windows/amd64
+    image: ${build_image}
+    volumes:
+      - ${socket_mount}
+    environment: *build_vars
+    commands:
+      - .woodpecker/build.ps1
+
+  - name: build linux
+    when:
+      - matrix:
+          platform: linux/amd64
+    image: ${build_image}
+    volumes:
+      - ${socket_mount}
+    environment: *build_vars
+    commands:
+      - sh .woodpecker/build.sh

@@ -1,0 +1,13 @@
+{
+  "extends": ["config:base"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^requirements\\.txt$"],
+      "matchStrings": [
+        "^(?<depName>[a-zA-Z0-9\\-_]+)==(?<currentValue>[a-zA-Z0-9\\.]+) --hash=sha256:(?<hash>[a-fA-F0-9]{64})$"
+      ],
+      "datasourceTemplate": "pypi",
+      "depNameTemplate": "{{depName}}"
+    }
+  ]
+}
