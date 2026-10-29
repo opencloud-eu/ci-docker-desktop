@@ -1,0 +1,24 @@
+diff --git a/craft-appimage-alma9/build.sh b/craft-appimage-alma9/build.sh
+index 66bc695..907cc8a 100755
+--- a/craft-appimage-alma9/build.sh
++++ b/craft-appimage-alma9/build.sh
+@@ -28,7 +28,7 @@ packages=(
+     fuse
+     # qt
+     at-spi2-atk-devel # accessibility
+-    mesa-vulkan-drivers vulkan-headers wayland-devel mesa-libGL-devel
++    vulkan-headers wayland-devel mesa-libGL-devel
+     libX11-devel libX11-xcb libxcb-devel libxkbcommon-x11-devel libxkbcommon-devel libXi-devel
+     libXcomposite-devel libXcursor-devel libXrandr-devel libXtst-devel
+     xcb-util-devel
+@@ -61,6 +61,10 @@ packages=(
+     # https://docs.appimage.org/packaging-guide/optional/appstream.html
+     appstream-devel
+ )
++# mesa-vulkan-drivers is not available on aarch64
++if [ $(arch) == "x86_64" ]; then
++    packages+=(mesa-vulkan-drivers)
++fi
+ dnf install -y "${packages[@]}"
+ 
+ # install powershell
