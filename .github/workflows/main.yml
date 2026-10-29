@@ -7,8 +7,60 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  IMAGE: ghcr.io/opencloud-eu/ci-docker-desktop/appimage
+
 jobs:
   docker:
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Clone KDE ci-images
+        run: git clone --depth 1 https://invent.kde.org/sysadmin/ci-images.git "${{ runner.temp }}/ci-images"
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          # use the local docker daemon so the base image built below is available to the next build
+          driver: docker
+      -
+        name: Build craft-appimage-alma9 base image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ runner.temp }}/ci-images/craft-appimage-alma9
+          pull: true
+          load: true
+          tags: craft-appimage-alma9:latest
+      -
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: appimage
+          push: true
+          tags: ${{ env.IMAGE }}:latest-${{ matrix.arch }}
+
+  manifest:
+    needs: docker
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -24,9 +76,8 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: "{{defaultContext}}:appimage"
-          push: true
-          tags: ghcr.io/opencloud-eu/ci-docker-desktop/appimage:latest
+        name: Create multi-arch manifest
+        run: |
+          docker buildx imagetools create -t ${{ env.IMAGE }}:latest \
+            ${{ env.IMAGE }}:latest-amd64 \
+            ${{ env.IMAGE }}:latest-arm64

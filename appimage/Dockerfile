@@ -1,4 +1,4 @@
-FROM invent-registry.kde.org/sysadmin/ci-images/craft-appimage-alma9:latest
+FROM craft-appimage-alma9:latest
 
 RUN dnf install -y awscli2 fuse3-devel file && \
     dnf clean all && \
